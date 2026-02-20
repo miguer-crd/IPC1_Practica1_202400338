@@ -2,8 +2,6 @@ package com.mycompany.proyecto1;
 
 import java.util.Scanner;
 import java.util.Random;
-import java.util.List;
-import java.util.ArrayList;
 
 public class PROYECTO1 {
 
@@ -23,17 +21,9 @@ public class PROYECTO1 {
     private static Random rand = new Random();
 
     // ===== HISTORIAL =====
-    private static class Partida {
-        String nombreUsuario;
-        int puntaje;
-
-        Partida(String nombreUsuario, int puntaje){
-            this.nombreUsuario = nombreUsuario;
-            this.puntaje = puntaje;
-        }
-    }
-
-    private static List<Partida> historial = new ArrayList<>();
+    private static String[] nombres = new String[100]; // hasta 100 partidas
+    private static int[] puntos = new int[100];
+    private static int contadorPartidas = 0;
 
     // ================= MAIN =================
     public static void main(String [] args){
@@ -64,7 +54,6 @@ public class PROYECTO1 {
         switch (opcionInicio) {
 
             case 1:
-
 
                 int puntaje = 0;
                 int vidas = 3;
@@ -145,7 +134,9 @@ public class PROYECTO1 {
                         int pausa = sc.nextInt();
 
                         if(pausa == 4){
-                            historial.add(new Partida(nombreUsuario, puntaje));
+                            nombres[contadorPartidas] = nombreUsuario;
+                            puntos[contadorPartidas] = puntaje;
+                            contadorPartidas++;
                             System.out.println("REGRESANDO AL MENU PRINCIPAL...");
                             main(null);
                             return;
@@ -165,7 +156,9 @@ public class PROYECTO1 {
                             vidas--;
                             if(vidas <= 0){
                                 System.out.println("GAME OVER");
-                                historial.add(new Partida(nombreUsuario, puntaje));
+                                nombres[contadorPartidas] = nombreUsuario;
+                                puntos[contadorPartidas] = puntaje;
+                                contadorPartidas++;
                                 System.out.println("REGRESANDO AL MENU PRINCIPAL...");
                                 main(null);
                                 return;
@@ -176,7 +169,9 @@ public class PROYECTO1 {
 
                         if(!quedanPremios(tablero)){
                             System.out.println("FELICIDADES! HAS RECOGIDO TODOS LOS PREMIOS!");
-                            historial.add(new Partida(nombreUsuario, puntaje));
+                            nombres[contadorPartidas] = nombreUsuario;
+                            puntos[contadorPartidas] = puntaje;
+                            contadorPartidas++;
                             System.out.println("REGRESANDO AL MENU PRINCIPAL...");
                             main(null);
                             return;
@@ -190,12 +185,11 @@ public class PROYECTO1 {
 
                 System.out.println(" ------ HISTORIAL DE PARTIDAS ------ ");
 
-                if(historial.isEmpty()){
+                if(contadorPartidas == 0){
                     System.out.println("NO HAY PARTIDAS GENERADAS");
                 } else {
-                    for(int i = historial.size()-1; i >= 0; i--){
-                        Partida p = historial.get(i);
-                        System.out.println("|  JUGADOR: |" + p.nombreUsuario + " |  PUNTOS: |" + p.puntaje + "|");
+                    for(int i = contadorPartidas-1; i >= 0; i--){
+                        System.out.println("|  JUGADOR: |" + nombres[i] + " |  PUNTOS: |" + puntos[i] + "|");
                     }
                 }
 
@@ -326,7 +320,6 @@ public class PROYECTO1 {
         tablero[fila][columna] = pacman;
         posicion[0] = fila;
         posicion[1] = columna;
-
         return 0;
     }
 }
